@@ -1,7 +1,5 @@
 {
   "framework": null,
-  "root": ".",
-  "buildCommand": "pnpm build:web",
-  "outputDirectory": "apps/stage-web/dist",
-  "installCommand": "pnpm install"
+  "installCommand": "pnpm install",
+  "buildCommand": "pnpm build:web"
 }
