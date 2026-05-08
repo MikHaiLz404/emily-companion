@@ -12,12 +12,14 @@ import { useDiscordStore } from '../stores/modules/discord'
 import { useFactorioStore } from '../stores/modules/gaming-factorio'
 import { useMinecraftStore } from '../stores/modules/gaming-minecraft'
 import { useHearingStore } from '../stores/modules/hearing'
-import { useSocialStore } from '../stores/modules/social'
 import { useSpeechStore } from '../stores/modules/speech'
 import { useTwitterStore } from '../stores/modules/twitter'
 import { useVisionStore } from '../stores/modules/vision'
 
 const SOCIAL_ENABLED = import.meta.env.VITE_FEATURE_SOCIAL === 'true'
+
+// TODO: implement social module
+// import { useSocialStore } from '../stores/modules/social'
 
 export interface Module {
   id: string
@@ -44,12 +46,11 @@ export function useModulesList() {
   const minecraftStore = useMinecraftStore()
   const factorioStore = useFactorioStore()
   const artistryStore = useArtistryStore()
-  const socialStore = SOCIAL_ENABLED ? useSocialStore() : null
   const beatSyncState = ref<BeatSyncDetectorState>()
 
   minecraftStore.initialize()
 
-  const modulesList = computed<Module[]>(() => [
+  const baseModules: Module[] = [
     {
       id: 'consciousness',
       name: t('settings.pages.modules.consciousness.title'),
@@ -167,16 +168,13 @@ export function useModulesList() {
       configured: beatSyncState.value?.isActive ?? false,
       category: 'essential',
     },
-    {
-      id: 'social',
-      name: t('settings.pages.social.title'),
-      description: t('settings.pages.social.description'),
-      icon: 'i-solar:users-group-two-rounded-bold-duotone',
-      to: '/settings/social',
-      configured: socialStore?.isReady ?? false,
-      category: 'social',
-    },
-  ])
+  ]
+
+  const modulesList = computed<Module[]>(() => {
+    // TODO: implement social module when VITE_FEATURE_SOCIAL is enabled
+    // Currently social module is disabled until implementation is complete
+    return baseModules
+  })
 
   const categorizedModules = computed(() => {
     return modulesList.value.reduce((categories, module) => {

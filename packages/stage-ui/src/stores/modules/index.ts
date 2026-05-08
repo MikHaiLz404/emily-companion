@@ -4,7 +4,7 @@ export * from './discord'
 export * from './gaming-factorio'
 export * from './gaming-minecraft'
 export * from './hearing'
-export * from './social'
+// export * from './social' // TODO: implement social module
 export * from './speech'
 export * from './twitter'
 export * from './vision'
