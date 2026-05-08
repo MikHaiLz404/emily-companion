@@ -60,6 +60,8 @@ const modelOptions = computed(() => {
   }))
 })
 
+const providerModels = computed(() => providersStore.getModelsForProvider(providerId))
+
 const availableVoices = computed(() => speechStore.availableVoices[providerId] || [])
 
 const model = computed({
