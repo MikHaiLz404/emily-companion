@@ -214,7 +214,8 @@ async function handleSetAsBackground(entry: any) {
 }
 
 async function handleDeleteEntry(id: string) {
-  if (confirm('Are you sure you want to delete this image from the journal?')) {
+  // eslint-disable-next-line no-alert -- Browser confirm is intentional here for simple deletion confirmation
+  if (window.confirm('Are you sure you want to delete this image from the journal?')) {
     await backgroundStore.removeBackground(id)
   }
 }

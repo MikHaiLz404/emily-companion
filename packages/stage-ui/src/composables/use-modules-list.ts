@@ -16,6 +16,11 @@ import { useSpeechStore } from '../stores/modules/speech'
 import { useTwitterStore } from '../stores/modules/twitter'
 import { useVisionStore } from '../stores/modules/vision'
 
+const SOCIAL_ENABLED = import.meta.env.VITE_FEATURE_SOCIAL === 'true'
+
+// TODO: implement social module
+// import { useSocialStore } from '../stores/modules/social'
+
 export interface Module {
   id: string
   name: string
@@ -45,7 +50,7 @@ export function useModulesList() {
 
   minecraftStore.initialize()
 
-  const modulesList = computed<Module[]>(() => [
+  const baseModules: Module[] = [
     {
       id: 'consciousness',
       name: t('settings.pages.modules.consciousness.title'),
@@ -163,7 +168,13 @@ export function useModulesList() {
       configured: beatSyncState.value?.isActive ?? false,
       category: 'essential',
     },
-  ])
+  ]
+
+  const modulesList = computed<Module[]>(() => {
+    // TODO: implement social module when VITE_FEATURE_SOCIAL is enabled
+    // Currently social module is disabled until implementation is complete
+    return baseModules
+  })
 
   const categorizedModules = computed(() => {
     return modulesList.value.reduce((categories, module) => {
@@ -181,6 +192,7 @@ export function useModulesList() {
     essential: t('settings.pages.modules.categories.essential'),
     messaging: t('settings.pages.modules.categories.messaging'),
     gaming: t('settings.pages.modules.categories.gaming'),
+    social: t('settings.pages.modules.categories.social'),
   }))
 
   // TODO(Makito): We can make this a reactive value from a synthetic store.

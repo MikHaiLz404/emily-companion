@@ -1,5 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import process from 'node:process'
 
 import JSZip from 'jszip'
 
@@ -8,8 +9,11 @@ import JSZip from 'jszip'
  */
 
 async function generateReport(zipPath: string) {
+  // eslint-disable-next-line no-console
   console.log(`\n================================================================`)
+  // eslint-disable-next-line no-console
   console.log(`LIVE2D STRUCTURE REPORT: ${path.basename(zipPath)}`)
+  // eslint-disable-next-line no-console
   console.log(`================================================================\n`)
 
   if (!fs.existsSync(zipPath)) {
@@ -40,6 +44,7 @@ async function generateReport(zipPath: string) {
   }
 
   // 1. Enumerate Files and Check Non-ASCII
+  // eslint-disable-next-line no-console
   console.log(`[1] Enumerating ${allFiles.length} files...`)
   allFiles.forEach((f) => {
     if (/[^\x00-\x7F]/.test(f)) {
@@ -166,25 +171,38 @@ async function generateReport(zipPath: string) {
   report.checks.push(`Total Motions found: ${report.metadata.motions.length}`)
 
   // Final Summary
+  // eslint-disable-next-line no-console
   console.log(`[2] SUMMARY`)
+  // eslint-disable-next-line no-console
   console.log(`    Type: ${report.structureType}`)
+  // eslint-disable-next-line no-console
   console.log(`    Status: ${report.issues.length === 0 ? 'VALID' : 'INVALID'}`)
 
   if (report.checks.length > 0) {
+    // eslint-disable-next-line no-console
     console.log(`\n[3] CHECKS PASSED:`)
-    report.checks.forEach(c => console.log(`    [V] ${c}`))
+    report.checks.forEach((c) => {
+      // eslint-disable-next-line no-console
+      console.log(`    [V] ${c}`)
+    })
   }
 
   if (report.issues.length > 0) {
+    // eslint-disable-next-line no-console
     console.log(`\n[4] ISSUES FOUND:`)
-    report.issues.forEach(i => console.log(`    [X] ${i}`))
+    report.issues.forEach((i) => {
+      // eslint-disable-next-line no-console
+      console.log(`    [X] ${i}`)
+    })
   }
 
+  // eslint-disable-next-line no-console
   console.log(`\n================================================================\n`)
 }
 
 const target = process.argv[2]
 if (!target) {
+  // eslint-disable-next-line no-console
   console.log('Usage: node_modules/.bin/tsx packages/stage-ui-live2d/src/utils/live2d-structure-report.ts <zip-path>')
 }
 else {

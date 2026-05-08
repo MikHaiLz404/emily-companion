@@ -25,6 +25,9 @@ describe('useOptimistic', () => {
       return state.value
     })
 
+    // TEST BREAK FOR CI VERIFICATION - REMOVE AFTER
+    expect(true).toBe(false)
+
     const { state: resultState, isLoading } = useOptimisticMutation({
       apply,
       action,

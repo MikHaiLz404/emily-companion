@@ -148,11 +148,13 @@ function waitForWorkerMessage<T = any>(
   return new Promise((resolve, reject) => {
     let timeoutId: ReturnType<typeof setTimeout> | undefined
     let abortListener: (() => void) | null = null
+    let activeHandler: ((event: MessageEvent) => void) | null = null
 
     const cleanup = (): void => {
       if (timeoutId !== undefined)
         clearTimeout(timeoutId)
-      worker.removeEventListener('message', handler)
+      if (activeHandler)
+        worker.removeEventListener('message', activeHandler)
       if (abortListener && signal)
         signal.removeEventListener('abort', abortListener)
     }
@@ -177,8 +179,10 @@ function waitForWorkerMessage<T = any>(
         callback?.(event.data)
       }
     }
+    activeHandler = handler
 
-    worker.addEventListener('message', handler)
+    if (activeHandler)
+      worker.addEventListener('message', activeHandler)
 
     timeoutId = setTimeout(() => {
       cleanup()
