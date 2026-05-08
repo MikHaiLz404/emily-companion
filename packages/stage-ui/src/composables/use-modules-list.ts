@@ -17,6 +17,8 @@ import { useSpeechStore } from '../stores/modules/speech'
 import { useTwitterStore } from '../stores/modules/twitter'
 import { useVisionStore } from '../stores/modules/vision'
 
+const SOCIAL_ENABLED = import.meta.env.VITE_FEATURE_SOCIAL === 'true'
+
 export interface Module {
   id: string
   name: string
@@ -42,7 +44,7 @@ export function useModulesList() {
   const minecraftStore = useMinecraftStore()
   const factorioStore = useFactorioStore()
   const artistryStore = useArtistryStore()
-  const socialStore = useSocialStore()
+  const socialStore = SOCIAL_ENABLED ? useSocialStore() : null
   const beatSyncState = ref<BeatSyncDetectorState>()
 
   minecraftStore.initialize()
@@ -171,7 +173,7 @@ export function useModulesList() {
       description: t('settings.pages.social.description'),
       icon: 'i-solar:users-group-two-rounded-bold-duotone',
       to: '/settings/social',
-      configured: socialStore.isReady,
+      configured: socialStore?.isReady ?? false,
       category: 'social',
     },
   ])
