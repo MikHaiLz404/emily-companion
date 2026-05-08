@@ -1,6 +1,7 @@
 {
   "framework": null,
+  "root": ".",
   "buildCommand": "pnpm build:web",
   "outputDirectory": "apps/stage-web/dist",
-  "installCommand": "pnpm install --frozen-lockfile"
+  "installCommand": "pnpm install"
 }
