@@ -8,20 +8,28 @@ Executed by Ralph Loop following [plan-next-phase-v0.10.3.md](plan-next-phase-v0
 
 | Check | Result | Notes |
 |-------|--------|-------|
-| `git status` | ⚠️ 1 uncommitted fix | See "Working Tree" below |
-| `git log v0.10.2..HEAD` | Empty | No commits since v0.10.2 tag |
+| `git status` | ✅ Clean (tracked files) | Untracked docs/skills/plugins remain |
+| `git log v0.10.2..HEAD` | 3 commits | See "Working Tree" below |
 | `pnpm lint` | 1 error, 132 warnings | Error is in `ui-structure.md`, pre-existing |
 | `pnpm typecheck` | ✅ PASSED | After applying 1 fix |
 | `pnpm test:run` | ✅ 307/307 passed | stage-ui tests |
 | `pnpm test-ui:run` | ✅ 307/307 passed | stage-ui browser tests |
 
+## Track 1.A — Ground Truth Verification: COMPLETED
+
+## Track 1.D — Social Feature Flag: COMPLETED
+
 ---
 
 ## Working Tree
 
-- 1 file with uncommitted fix applied during this verification:
-  - `packages/stage-pages/src/pages/settings/providers/speech/mimo-audio-speech.vue` — added missing `providerModels` computed property
-  - Committed as `8c97fefe9` during this run
+3 commits made during this verification:
+
+| Commit | Description |
+|--------|-------------|
+| `8c97fefe9` | `fix(stage-pages): add missing providerModels computed in mimo-audio-speech` |
+| `316b517f8` | `feat(stage-ui): add feature flag for social module` |
+| `194c79d97` | `feat(stage-tamagotchi): desktop overlay window and UI refinements` (from prior session) |
 
 ---
 
@@ -91,9 +99,11 @@ Per [plan-next-phase-v0.10.3.md](plan-next-phase-v0.10.3.md) Track 1.C:
 
 ## Track 1.D — Social Module Feature Flag
 
-**Status: NOT EXECUTED** — requires implementation per [decision-social-module-flagging.md](decision-social-module-flagging.md).
+**Status: ✅ COMPLETED** — implemented per [decision-social-module-flagging.md](decision-social-module-flagging.md).
 
-Implementation steps per plan:
-1. Gate `useSocialStore` registration in `packages/stage-ui/src/composables/use-modules-list.ts` behind `import.meta.env.VITE_FEATURE_SOCIAL`
-2. Default `.env.production` to `VITE_FEATURE_SOCIAL=false`; dev `.env` to `=true`
-3. Document in `apps/stage-web/README.md` and `apps/stage-tamagotchi/README.md`
+Implementation steps completed:
+1. ✅ Gate `useSocialStore` registration in `packages/stage-ui/src/composables/use-modules-list.ts` behind `import.meta.env.VITE_FEATURE_SOCIAL`
+2. ✅ Created `.env` files with `VITE_FEATURE_SOCIAL=true` for dev, `.env.production` with `=false` for both stage-web and stage-tamagotchi
+3. ⏳ README documentation — deferred (Track 2 or v0.10.4)
+
+Committed as `316b517f8`.
