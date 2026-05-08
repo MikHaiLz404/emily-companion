@@ -522,6 +522,7 @@ pages:
       messaging: Messaging
       gaming: Gaming
       artistry: Artistry
+      social: Social
     consciousness:
       description: Personality, desired model, etc.
       sections:
@@ -1636,3 +1637,101 @@ wip:
   description: >-
     This feature is currently under development and not yet publicly available.
     Check back in future updates for this functionality.
+social:
+  island:
+    title: Contacts
+    expand: Open contacts
+    collapse: Close contacts
+    all-contacts: All
+    online: Online
+    no-contacts: No contacts yet
+    add-first-contact: Add your first AIRI contact
+    add-contact: Add Contact
+    pending-requests: '{count} pending'
+  feed:
+    title: Social Feed
+    expand: Open feed
+    collapse: Close feed
+    news: News
+    invitations: Invitations
+    no-items: No feed items
+    no-items-description: News and invitations from your contacts will appear here
+    no-invitations: No upcoming invitations
+    from: 'From {name}'
+    rsvp:
+      attend: Going
+      maybe: Maybe
+      decline: Can't Go
+      attending: You're attending
+    unknown-contact: Unknown Contact
+  settings:
+    never: Never
+    module-name: Social Network
+    description: Connect with other AIRIs
+    status-active: Active
+    status-inactive: Inactive
+    notifications: notifications
+    your-identity: Your Identity
+    syncing: Syncing...
+    syncing-description: Contacting your contacts...
+    last-sync: Last synced
+    sync-now: Sync Now
+    contacts:
+      title: Contacts
+      description: Manage your AIRI contacts
+      add: Add Contact
+      add-button: Add
+      add-contact: Add New Contact
+      name: Display Name
+      phone: Phone Number
+      endpoint: AIRI Endpoint
+      add-error-required: Please fill in all fields
+      trusted: Trusted
+      pending: Pending
+      awaiting-response: Waiting for response
+      resend: Resend
+      confirm-delete: Are you sure you want to remove this contact?
+      empty: No contacts yet
+      empty-description: Add contacts to start connecting with other AIRIs
+    privacy:
+      title: Privacy & Sync
+      subtitle: Control your privacy settings and synchronization
+      identity: Identity & Discovery
+      your-identifier: Your AIRI Identifier
+      identifier-hint: Share this hash with others to connect
+      public-endpoint: Your Public Endpoint
+      endpoint-placeholder: https://your-airi.example.com/api
+      endpoint-hint: Others will poll this endpoint to receive messages from you
+      endpoint-error: Endpoint must start with https://
+      sync: Synchronization
+      enable-sync: Enable automatic sync
+      enable-sync-description: Automatically poll your contacts for new messages
+      sync-interval: Sync interval
+      sync-5min: 5 min
+      sync-15min: 15 min
+      sync-30min: 30 min
+      sync-60min: 60 min
+      sharing: Sharing Preferences
+      share-status: Share my status
+      share-status-description: Let contacts see when you're online
+      share-news: Share news updates
+      share-news-description: Automatically share local news with contacts
+      share-location: Share location
+      share-location-description: Include location in status updates
+      default-privacy: Default privacy level
+      option-all: Share with all
+      option-contacts: Share with contacts only
+      option-none: Don't share
+      danger-zone: Danger Zone
+      danger-description: These actions cannot be undone
+      reset-identity: Reset Identity
+  contacts:
+    just-now: Just now
+    minutes-ago: '{minutes}m ago'
+    hours-ago: '{hours}h ago'
+    days-ago: '{days}d ago'
+  social:
+    title: Social
+    description: Connect with other AIRIs via agent-to-agent communication
+    setup-required: Setup Required
+    setup-required-description: Initialize your social identity to start connecting with other AIRIs

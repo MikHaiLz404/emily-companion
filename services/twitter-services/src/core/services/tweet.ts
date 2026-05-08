@@ -1,6 +1,8 @@
 import type { TwitterService } from '../../types/services'
 import type { Context } from '../browser/context'
 
+import { errorMessageFrom } from '@moeru/std'
+
 import { TWITTER_BASE_URL, TWITTER_HOME_URL, TWITTER_SEARCH_URL } from '../../constants'
 import { SELECTORS } from '../../parsers/selectors'
 import { TweetParser } from '../../parsers/tweet-parser'
@@ -98,7 +100,7 @@ export function useTwitterTweetServices(ctx: Context): TwitterService {
     }
     catch (error: unknown) {
       console.error('Error searching tweets:', error)
-      throw new Error(`Failed to search tweets: ${error instanceof Error ? error.message : String(error)}`)
+      throw new Error(`Failed to search tweets: ${errorMessageFrom(error)}`)
     }
   }
 
@@ -135,7 +137,7 @@ export function useTwitterTweetServices(ctx: Context): TwitterService {
     }
     catch (error: unknown) {
       console.error('Error liking tweet:', error)
-      throw new Error(`Failed to like tweet: ${error instanceof Error ? error.message : String(error)}`)
+      throw new Error(`Failed to like tweet: ${errorMessageFrom(error)}`)
     }
   }
 
@@ -170,7 +172,7 @@ export function useTwitterTweetServices(ctx: Context): TwitterService {
     }
     catch (error: unknown) {
       console.error('Error retweeting:', error)
-      throw new Error(`Failed to retweet: ${error instanceof Error ? error.message : String(error)}`)
+      throw new Error(`Failed to retweet: ${errorMessageFrom(error)}`)
     }
   }
 
@@ -259,7 +261,7 @@ export function useTwitterTweetServices(ctx: Context): TwitterService {
     }
     catch (error: unknown) {
       console.error('Error posting tweet:', error)
-      throw new Error(`Failed to post tweet: ${error instanceof Error ? error.message : String(error)}`)
+      throw new Error(`Failed to post tweet: ${errorMessageFrom(error)}`)
     }
   }
 
@@ -322,7 +324,7 @@ export function useTwitterTweetServices(ctx: Context): TwitterService {
     }
     catch (error: unknown) {
       console.error('Error getting tweet details:', error)
-      throw new Error(`Failed to get tweet details: ${error instanceof Error ? error.message : String(error)}`)
+      throw new Error(`Failed to get tweet details: ${errorMessageFrom(error)}`)
     }
   }
 

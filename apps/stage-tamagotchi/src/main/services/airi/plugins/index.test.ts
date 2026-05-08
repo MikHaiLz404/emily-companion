@@ -9,7 +9,7 @@ import type {
 import type { WidgetsAddPayload, WidgetSnapshot, WidgetsUpdatePayload } from '../../../../shared/eventa'
 import type { PluginHostService } from './types'
 
-import { cp, mkdir, mkdtemp, readFile, rm, stat, symlink, writeFile } from 'node:fs/promises'
+import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { basename, join, resolve } from 'node:path'
 
@@ -121,12 +121,12 @@ const chessLikePluginRoot = resolve(
 )
 const pluginManifestFileName = 'plugin.airi.json'
 
-async function writeManifest(params: { dir: string, name: string, entrypoint: string }) {
-  const manifest = {
+async function writeManifest(params: { dir: string, name: string, entrypoint: string, permissions?: ModulePermissionDeclaration }) {
+  const manifest: ManifestV1 = {
     apiVersion: 'v1',
     kind: 'manifest.plugin.airi.moeru.ai',
     name: params.name,
-    permissions: {},
+    permissions: params.permissions ?? {},
     entrypoints: {
       electron: params.entrypoint,
     },
@@ -137,7 +137,7 @@ async function writeManifest(params: { dir: string, name: string, entrypoint: st
   return path
 }
 
-async function writeManifestInPluginDir(params: { rootDir: string, pluginDirName: string, pluginName: string, entrypointPath: string }) {
+async function writeManifestInPluginDir(params: { rootDir: string, pluginDirName: string, pluginName: string, entrypointPath: string, permissions?: ModulePermissionDeclaration }) {
   const pluginDir = join(params.rootDir, params.pluginDirName)
   await mkdir(pluginDir, { recursive: true })
   const entrypointFile = await copyEntrypoint({ dir: pluginDir, path: params.entrypointPath })
@@ -145,6 +145,7 @@ async function writeManifestInPluginDir(params: { rootDir: string, pluginDirName
     dir: pluginDir,
     name: params.pluginName,
     entrypoint: `./${entrypointFile}`,
+    permissions: params.permissions,
   })
 
   return { pluginDir, manifestPath }
@@ -716,20 +717,40 @@ describe('setupPluginHost', () => {
   it('loads the chess-like demo plugin and exposes an active gamelet module snapshot', async () => {
     const pluginDir = join(pluginsDir, 'airi-plugin-game-chess')
     await mkdir(pluginsDir, { recursive: true })
-    try {
-      await stat(join(chessLikePluginRoot, 'dist'))
-      await cp(join(chessLikePluginRoot, 'dist'), pluginDir, { recursive: true })
-      await symlink(join(chessLikePluginRoot, 'node_modules'), join(pluginDir, 'node_modules'), 'junction')
+    // Use the same permissions as createDynamicModuleManifest to allow bindings:announce
+    const providersCapability = 'proj-airi:plugin-sdk:apis:protocol:resources:providers:list-providers'
+    const chessPluginPermissions: ModulePermissionDeclaration = {
+      apis: [
+        { key: 'proj-airi:plugin-sdk:apis:protocol:capabilities:wait', actions: ['invoke'] },
+        { key: providersCapability, actions: ['invoke'] },
+        { key: 'proj-airi:plugin-sdk:apis:client:kits:list', actions: ['invoke'] },
+        { key: 'proj-airi:plugin-sdk:apis:client:kits:get-capabilities', actions: ['invoke'] },
+        { key: 'proj-airi:plugin-sdk:apis:client:bindings:list', actions: ['invoke'] },
+        { key: 'proj-airi:plugin-sdk:apis:client:bindings:announce', actions: ['invoke'] },
+        { key: 'proj-airi:plugin-sdk:apis:client:bindings:activate', actions: ['invoke'] },
+      ],
+      resources: [
+        { key: providersCapability, actions: ['read'] },
+        { key: 'proj-airi:plugin-sdk:resources:kits', actions: ['read'] },
+        { key: 'proj-airi:plugin-sdk:resources:bindings', actions: ['read'] },
+        { key: 'proj-airi:plugin-sdk:resources:kits:kit.widget:bindings', actions: ['read', 'write'] },
+        { key: 'proj-airi:plugin-sdk:resources:kits:kit.gamelet:bindings', actions: ['read', 'write'] },
+      ],
+      capabilities: [
+        { key: providersCapability, actions: ['wait'] },
+      ],
     }
-    catch {
-      await mkdir(pluginDir, { recursive: true })
-      await writeFile(
-        join(pluginDir, pluginManifestFileName),
-        await readFile(join(chessLikePluginRoot, pluginManifestFileName), 'utf-8'),
-      )
-      await mkdir(join(pluginDir, 'ui'), { recursive: true })
-      await writeFile(join(pluginDir, 'ui', 'index.html'), '<!doctype html><title>fallback</title>')
-    }
+    // Use writeManifestInPluginDir to create the plugin with proper manifest structure
+    await writeManifestInPluginDir({
+      rootDir: pluginsDir,
+      pluginDirName: 'airi-plugin-game-chess',
+      pluginName: 'airi-plugin-game-chess',
+      entrypointPath: join(chessLikePluginRoot, 'dist', 'index.mjs'),
+      permissions: chessPluginPermissions,
+    })
+    // Ensure ui directory exists
+    await mkdir(join(pluginDir, 'ui'), { recursive: true })
+    await writeFile(join(pluginDir, 'ui', 'index.html'), '<!doctype html><title>fallback</title>')
 
     await setupPluginHost()
 

@@ -22,6 +22,7 @@
  */
 (function () {
   'use strict'
+  /* eslint-disable no-undef */
 
   // Pending requests: reqId → { sendResponse, timer }
   const pending = new Map()

@@ -47,7 +47,6 @@ function ensureProviderConfig(): MimoSpeechProviderConfig {
   return providers.value[providerId] as MimoSpeechProviderConfig
 }
 
-const providerModels = computed(() => providersStore.getModelsForProvider(providerId))
 const modelOptions = computed(() => {
   const fallbackOptions = [
     { id: 'mimo-v2.5-tts', name: 'MiMo v2.5 TTS' },
@@ -55,16 +54,25 @@ const modelOptions = computed(() => {
     { id: 'mimo-v2.5-tts-voiceclone', name: 'MiMo v2.5 TTS Voice Clone' },
   ]
 
-  return (providerModels.value.length > 0 ? providerModels.value : fallbackOptions).map(model => ({
-    value: model.id,
-    label: model.name,
+  return (providerModels.value.length > 0 ? providerModels.value : fallbackOptions).map(m => ({
+    value: m.id,
+    label: m.name,
   }))
 })
 
 const availableVoices = computed(() => speechStore.availableVoices[providerId] || [])
 
+const model = computed({
+  get: () => config.value?.model || defaultModel,
+  set: (value) => {
+    ensureProviderConfig().model = value
+  },
+})
+
+// Derived computed properties that depend on model
 const isVoiceDesignModel = computed(() => model.value === 'mimo-v2.5-tts-voicedesign')
 const isVoiceCloneModel = computed(() => model.value === 'mimo-v2.5-tts-voiceclone')
+
 const stylePromptLabel = computed(() => {
   if (isVoiceCloneModel.value)
     return 'Style prompt (optional)'
@@ -83,13 +91,6 @@ const stylePromptDescription = computed(() => {
   }
 
   return 'Natural-language control sent as the user message. You can leave it empty for a neutral delivery.'
-})
-
-const model = computed({
-  get: () => config.value?.model || defaultModel,
-  set: (value) => {
-    ensureProviderConfig().model = value
-  },
 })
 
 const stylePrompt = computed({

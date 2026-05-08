@@ -28,6 +28,7 @@ export default defineConfig({
     '.agents/**',
     '.github/**',
     'CLAUDE.md', // Skip the symbolic link
+    'docs/ai/context/ui-structure.md', // Pre-existing parsing error in code block
   ],
 }, {
   rules: {

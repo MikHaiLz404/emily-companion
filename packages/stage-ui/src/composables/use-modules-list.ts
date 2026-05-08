@@ -12,6 +12,7 @@ import { useDiscordStore } from '../stores/modules/discord'
 import { useFactorioStore } from '../stores/modules/gaming-factorio'
 import { useMinecraftStore } from '../stores/modules/gaming-minecraft'
 import { useHearingStore } from '../stores/modules/hearing'
+import { useSocialStore } from '../stores/modules/social'
 import { useSpeechStore } from '../stores/modules/speech'
 import { useTwitterStore } from '../stores/modules/twitter'
 import { useVisionStore } from '../stores/modules/vision'
@@ -41,6 +42,7 @@ export function useModulesList() {
   const minecraftStore = useMinecraftStore()
   const factorioStore = useFactorioStore()
   const artistryStore = useArtistryStore()
+  const socialStore = useSocialStore()
   const beatSyncState = ref<BeatSyncDetectorState>()
 
   minecraftStore.initialize()
@@ -163,6 +165,15 @@ export function useModulesList() {
       configured: beatSyncState.value?.isActive ?? false,
       category: 'essential',
     },
+    {
+      id: 'social',
+      name: t('settings.pages.social.title'),
+      description: t('settings.pages.social.description'),
+      icon: 'i-solar:users-group-two-rounded-bold-duotone',
+      to: '/settings/social',
+      configured: socialStore.isReady,
+      category: 'social',
+    },
   ])
 
   const categorizedModules = computed(() => {
@@ -181,6 +192,7 @@ export function useModulesList() {
     essential: t('settings.pages.modules.categories.essential'),
     messaging: t('settings.pages.modules.categories.messaging'),
     gaming: t('settings.pages.modules.categories.gaming'),
+    social: t('settings.pages.modules.categories.social'),
   }))
 
   // TODO(Makito): We can make this a reactive value from a synthetic store.
