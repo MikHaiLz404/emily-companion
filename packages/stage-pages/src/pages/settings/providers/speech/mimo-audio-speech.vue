@@ -47,6 +47,8 @@ function ensureProviderConfig(): MimoSpeechProviderConfig {
   return providers.value[providerId] as MimoSpeechProviderConfig
 }
 
+const providerModels = computed(() => providersStore.getModelsForProvider(providerId))
+
 const modelOptions = computed(() => {
   const fallbackOptions = [
     { id: 'mimo-v2.5-tts', name: 'MiMo v2.5 TTS' },
@@ -59,8 +61,6 @@ const modelOptions = computed(() => {
     label: m.name,
   }))
 })
-
-const providerModels = computed(() => providersStore.getModelsForProvider(providerId))
 
 const availableVoices = computed(() => speechStore.availableVoices[providerId] || [])
 
